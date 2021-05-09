@@ -3,8 +3,12 @@ project(cppcoin)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package(OpenSSL REQUIRED)
 
 add_executable(cppcoin src/blockchain.cpp)
+target_link_libraries(cppcoin PRIVATE ${OPENSSL_LIBRARIES})
 
 # Tools
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/ClangTools.cmake OPTIONAL
