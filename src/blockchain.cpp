@@ -41,6 +41,13 @@ class Block {
 
   [[nodiscard]] const Hash& hash() const { return hash_; }
 
+  void mineHash(uint32_t difficulty) {
+    while (hash_.rfind(std::string(difficulty, '0'), 0) != 0) {
+      nonce_++;
+      refreshHash();
+    }
+  }
+
   friend std::ostream& operator<<(std::ostream& os, const Block& block) {
     os << "timestamp: " << block.timestamp_ << "\n";
     os << "data: " << block.data_ << "\n";
@@ -54,11 +61,13 @@ class Block {
   Data data_;
   Hash hash_;
   Hash previous_hash_;
+  size_t nonce_{0};
 
   void refreshHash() {
     std::optional<std::string> hash;
     do {
-      hash = sha256(std::to_string(timestamp_.time_since_epoch().count()) + data_ + previous_hash_);
+      hash = sha256(std::to_string(timestamp_.time_since_epoch().count()) + data_ + previous_hash_ +
+                    std::to_string(nonce_));
     } while (!hash);
     hash_ = hash.value();
   }
@@ -70,6 +79,7 @@ class Blockchain {
 
   void addBlock(Block new_block) {
     new_block.setPreviousHash(chain_.back().hash());
+    new_block.mineHash(mining_difficulty);
     chain_.push_back(std::move(new_block));
   }
 
@@ -99,12 +109,19 @@ class Blockchain {
     block.setPreviousHash("0");
     return block;
   }
+
+  const uint32_t mining_difficulty = 4;
 };
 
 int main(int /*argc*/, char* /*argv*/[]) {
   Blockchain cppcoin;
+
+  std::cout << "Add block 1, mining...\n";
   cppcoin.addBlock(Block{Clock::now(), "transaction: 100"});
+  std::cout << "Add block 2, mining...\n";
   cppcoin.addBlock(Block{Clock::now(), "transaction: 10"});
+  std::cout << "Add block 3, mining...\n";
+  cppcoin.addBlock(Block{Clock::now(), "transaction: 1"});
 
   std::cout << "cppcoin: \n\n" << cppcoin << "\n";
   std::cout << "cppcoin is valid: " << std::boolalpha << cppcoin.isValid() << "\n";
