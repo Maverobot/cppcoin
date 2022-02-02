@@ -170,8 +170,8 @@ class Blockchain {
 int main(int /*argc*/, char* /*argv*/[]) {
   Blockchain cppcoin;
 
-  cppcoin.addTransaction({"address1", "address2", 100});
-  cppcoin.addTransaction({"address2", "address1", 50});
+  cppcoin.addTransaction({"address1", "address2", 100});  // NOLINT [readability-magic-numbers]
+  cppcoin.addTransaction({"address2", "address1", 50});   // NOLINT [readability-magic-numbers]
 
   std::cout << "Starting the miner...\n";
   cppcoin.minePendingTransactions("reward_adress");

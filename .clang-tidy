@@ -1,5 +1,18 @@
-Checks: 'clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-alpha*,google-*,misc-*,readability-*,modernize-*,performance-*, -modernize-use-trailing-return-type'
+Checks: >
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  -clang-analyzer-alpha*,
+  google-*,
+  misc-*,
+  readability-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  performance-*
+
+WarningsAsErrors: '*'
+
 HeaderFilterRegex: ''
+
 CheckOptions:
 # Classes, structs, ...
   - key:    readability-identifier-naming.NamespaceCase
