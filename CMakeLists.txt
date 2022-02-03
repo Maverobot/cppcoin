@@ -9,6 +9,7 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 include(${CMAKE_SOURCE_DIR}/cmake/StaticAnalysis.cmake)
 enable_clang_tidy()
+enable_cppcheck()
 
 find_package(OpenSSL REQUIRED)
 

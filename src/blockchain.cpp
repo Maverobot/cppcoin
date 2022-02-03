@@ -53,9 +53,8 @@ std::ostream& operator<<(std::ostream& o, const std::vector<Transaction>& vec) {
 
 class Block {
  public:
-  Block(TimeStamp timestamp, Transactions transactions) {
-    timestamp_ = timestamp;
-    transactions_ = std::move(transactions);
+  Block(TimeStamp timestamp, Transactions transactions)
+      : timestamp_(timestamp), transactions_(std::move(transactions)) {
     refreshHash();
   }
 
@@ -93,12 +92,12 @@ class Block {
   size_t nonce_{0};
 
   void refreshHash() {
-    std::optional<std::string> hash;
+    std::optional<std::string> new_hash;
     do {
-      hash = sha256(std::to_string(timestamp_.time_since_epoch().count()) + str(transactions_) +
-                    previous_hash_ + std::to_string(nonce_));
-    } while (!hash);
-    hash_ = hash.value();
+      new_hash = sha256(std::to_string(timestamp_.time_since_epoch().count()) + str(transactions_) +
+                        previous_hash_ + std::to_string(nonce_));
+    } while (!new_hash);
+    hash_ = new_hash.value();
   }
 };
 
